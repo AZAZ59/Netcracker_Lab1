@@ -1,19 +1,49 @@
 package NC_Lab1.Model;
 
+import NC_Lab1.Util.GenreNotFoundException;
+
 import java.io.Serializable;
 
 /**
  * Created by azaz on 26/10/15.
  */
 public class Artist implements Serializable {
-    long id_artist;
-    String name;
-    Genre genre;
+    private long id_artist;
+    private String name;
+    private long genre_id;
 
-    public Artist(long id_artist, String name, Genre genre) {
-        this.id_artist = id_artist;
+    public Artist(String name, String genreName) throws GenreNotFoundException {
+        this.id_artist = ArtistStorage.getStorage().size();
         this.name = name;
-        this.genre = genre;
+
+        try {
+            this.genre_id = GenreStorage.getByName(genreName).getId_genre();
+        } catch (NullPointerException e) {
+            throw new GenreNotFoundException();
+        }
+
+        ArtistStorage.getStorage().put(this.genre_id, this);
+    }
+
+    public Genre getGenre() {
+        return GenreStorage.getById(genre_id);
+    }
+
+    public void setGenre(String regexp) {
+        this.genre_id = GenreStorage.getByName(regexp).getId_genre();
+    }
+
+    public void setGenre(long id) {
+        this.genre_id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Artist{" +
+                "id_artist=" + id_artist +
+                ", name='" + name + '\'' +
+                ", " + GenreStorage.getById(genre_id) +
+                '}';
     }
 
     public long getId_artist() {
@@ -33,11 +63,13 @@ public class Artist implements Serializable {
         this.name = name;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public long getGenre_id() {
+        return genre_id;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setGenre_id(long genre_id) {
+        this.genre_id = genre_id;
     }
+
+
 }

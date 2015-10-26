@@ -1,21 +1,42 @@
 package NC_Lab1.Model;
 
+import NC_Lab1.Util.ArtistNotFoundException;
+
 import java.io.Serializable;
 
 /**
  * Created by azaz on 26/10/15.
  */
 public class Album implements Serializable {
-    long id_alb;
-    String name;
-    int year;
-    Artist artist;
+    private long id_alb;
+    private String name;
+    private int year;
+    private Long artist_id;
 
-    public Album(long id_alb, String name, int year, Artist artist) {
-        this.id_alb = id_alb;
+    public Album(String name, int year, String artistName) throws ArtistNotFoundException {
+        this.id_alb = ArtistStorage.getStorage().size();
         this.name = name;
         this.year = year;
-        this.artist = artist;
+        //this.artist_id = artist_id;
+        try {
+            this.artist_id = ArtistStorage.getByName(artistName).getId_artist();
+        } catch (NullPointerException e) {
+            throw new ArtistNotFoundException();
+        }
+
+        AlbumStorage.getStorage().put(this.artist_id, this);
+    }
+
+    public Artist getArtist() {
+        return ArtistStorage.getById(artist_id);
+    }
+
+    public void setArtist(String regexp) {
+        this.artist_id = ArtistStorage.getByName(regexp).getId_artist();
+    }
+
+    public void setArtist(long id) {
+        this.artist_id = id;
     }
 
     public long getId_alb() {
@@ -42,11 +63,11 @@ public class Album implements Serializable {
         this.year = year;
     }
 
-    public Artist getArtist() {
-        return artist;
+    public Long getArtistId() {
+        return artist_id;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setArtistId(Long artist) {
+        this.artist_id = artist;
     }
 }

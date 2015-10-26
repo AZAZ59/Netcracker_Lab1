@@ -6,14 +6,25 @@ import java.io.Serializable;
  * Created by azaz on 26/10/15.
  */
 public class Genre implements Serializable {
-    long id_genre;
-    String name;
-    String description;
+    private long id_genre;
+    private String name;
+    private String description;
 
-    public Genre(long id_genre, String name, String description) {
-        this.id_genre = id_genre;
+    public Genre(String name, String description) {
+        this.id_genre = GenreStorage.getStorage().size();
         this.name = name;
         this.description = description;
+
+        GenreStorage.getStorage().put(this.id_genre, this);
+    }
+
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id_genre=" + id_genre +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                "}";
     }
 
     public long getId_genre() {

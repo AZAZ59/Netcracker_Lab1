@@ -1,21 +1,41 @@
 package NC_Lab1.Model;
 
+import NC_Lab1.Util.AlbumNotFoundException;
+
 import java.io.Serializable;
 
 /**
  * Created by azaz on 26/10/15.
  */
 public class Track implements Serializable {
-    long id_track;
-    long length;
-    String name;
-    Album alb;
+    private long id_track;
+    private long length;
+    private String name;
+    private Long album_id;
 
-    public Track(long id_track, long length, String name, Album alb) {
-        this.id_track = id_track;
+    public Track(long length, String name, String albumName) throws AlbumNotFoundException {
+        this.id_track = TrackStorage.getStorage().size();
         this.length = length;
         this.name = name;
-        this.alb = alb;
+        try {
+            this.album_id = AlbumStorage.getByName(albumName).getId_alb();
+        } catch (NullPointerException e) {
+            throw new AlbumNotFoundException();
+        }
+
+        TrackStorage.getStorage().put(this.album_id, this);
+    }
+
+    public Album getAlbum() {
+        return AlbumStorage.getById(album_id);
+    }
+
+    public void setAlbum(String regexp) {
+        this.album_id = AlbumStorage.getByName(regexp).getId_alb();
+    }
+
+    public void setAlbum(long id) {
+        this.album_id = id;
     }
 
     public long getId_track() {
@@ -43,11 +63,11 @@ public class Track implements Serializable {
         this.name = name;
     }
 
-    public Album getAlb() {
-        return alb;
+    public Long getAlbum_id() {
+        return album_id;
     }
 
-    public void setAlb(Album alb) {
-        this.alb = alb;
+    public void setAlbum_id(Long album_id) {
+        this.album_id = album_id;
     }
 }
