@@ -1,6 +1,9 @@
 package NC_Lab1.Model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by azaz on 26/10/15.
@@ -16,6 +19,15 @@ public class Genre implements Serializable {
         this.description = description;
 
         GenreStorage.getStorage().put(this.id_genre, this);
+    }
+
+    public static Set<Genre> getAll() {
+        Set<Genre> set = new HashSet<>();
+        for (Map.Entry<Long, Genre> longGenreEntry : GenreStorage.getStorage().entrySet()) {
+            set.add(longGenreEntry.getValue());
+        }
+        return set;
+
     }
 
     @Override

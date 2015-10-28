@@ -3,6 +3,9 @@ package NC_Lab1.Model;
 import NC_Lab1.Util.ArtistNotFoundException;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by azaz on 26/10/15.
@@ -24,19 +27,38 @@ public class Album implements Serializable {
             throw new ArtistNotFoundException();
         }
 
-        AlbumStorage.getStorage().put(this.artist_id, this);
+        AlbumStorage.getStorage().put(this.id_alb, this);
+    }
+
+    public static Set<Album> getAll() {
+        Set<Album> set = new HashSet<>();
+        for (Map.Entry<Long, Album> longAlbumEntry : AlbumStorage.getStorage().entrySet()) {
+            set.add(longAlbumEntry.getValue());
+        }
+        return set;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                "id_alb=" + id_alb +
+                ", name='" + name + '\'' +
+                ", year=" + year +
+                ", artist=" + ArtistStorage.getStorage().get(artist_id) +
+                '}';
     }
 
     public Artist getArtist() {
         return ArtistStorage.getById(artist_id);
     }
 
-    public void setArtist(String regexp) {
-        this.artist_id = ArtistStorage.getByName(regexp).getId_artist();
-    }
-
     public void setArtist(long id) {
         this.artist_id = id;
+    }
+
+    public void setArtist(String regexp) {
+        this.artist_id = ArtistStorage.getByName(regexp).getId_artist();
     }
 
     public long getId_alb() {

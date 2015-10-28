@@ -3,5 +3,5 @@ package NC_Lab1.Util;
 /**
  * Created by azaz on 26/10/15.
  */
-public class ArtistNotFoundException extends Throwable {
+public class ArtistNotFoundException extends IdentifierNotFoundException {
 }
