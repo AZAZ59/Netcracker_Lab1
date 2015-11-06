@@ -27,7 +27,7 @@ public class GenreStorage implements Serializable {
     public static void storeToFile(String filename) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(filename)));
-            oos.writeObject(getStorage());
+            oos.writeObject(ourInstance);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,8 +41,7 @@ public class GenreStorage implements Serializable {
     public static void loadFromFile(String filename) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(filename)));
-            ourInstance = new GenreStorage();
-            setStorage((HashMap<Long, Genre>) ois.readObject());
+            ourInstance = (GenreStorage) ois.readObject();
             ois.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,5 +80,9 @@ public class GenreStorage implements Serializable {
 
     public static void setStorage(HashMap<Long, Genre> storage) {
         GenreStorage.storage = storage;
+    }
+
+    protected Object readResolve() {
+        return getInstance();
     }
 }

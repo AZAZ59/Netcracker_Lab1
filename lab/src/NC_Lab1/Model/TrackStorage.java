@@ -27,7 +27,7 @@ public class TrackStorage implements Serializable {
     public static void storeToFile(String filename) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(filename)));
-            oos.writeObject(getStorage());
+            oos.writeObject(getInstance());
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,8 +40,7 @@ public class TrackStorage implements Serializable {
     public static void loadFromFile(String filename) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(filename)));
-            ourInstance = new TrackStorage();
-            setStorage((HashMap<Long, Track>) ois.readObject());
+            ourInstance = (TrackStorage) ois.readObject();
             ois.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,5 +79,9 @@ public class TrackStorage implements Serializable {
 
     public static void setStorage(HashMap<Long, Track> storage) {
         TrackStorage.storage = storage;
+    }
+
+    protected Object readResolve() {
+        return getInstance();
     }
 }

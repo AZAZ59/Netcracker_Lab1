@@ -1,6 +1,9 @@
 package NC_Lab1.Model;
 
+import NC_Lab1.Util.IdGenerator;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -9,16 +12,17 @@ import java.util.Set;
  * Created by azaz on 26/10/15.
  */
 public class Genre implements Serializable {
-    private long id_genre;
+    private long genreId;
     private String name;
     private String description;
+    private ArrayList<Long> trackList;
 
     public Genre(String name, String description) {
-        this.id_genre = GenreStorage.getStorage().size();
+        this.genreId = IdGenerator.getInstance().GetNextId();
         this.name = name;
         this.description = description;
-
-        GenreStorage.getStorage().put(this.id_genre, this);
+        this.trackList = new ArrayList<>();
+        GenreStorage.getStorage().put(this.genreId, this);
     }
 
     public static Set<Genre> getAll() {
@@ -33,19 +37,19 @@ public class Genre implements Serializable {
     @Override
     public String toString() {
         return "Genre{" +
-                "id_genre=" + id_genre +
+                "genreId=" + genreId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 "}";
     }
 
-    public long getId_genre() {
+    public long getGenreId() {
 
-        return id_genre;
+        return genreId;
     }
 
-    public void setId_genre(long id_genre) {
-        this.id_genre = id_genre;
+    public void setGenreId(long genreId) {
+        this.genreId = genreId;
     }
 
     public String getName() {
