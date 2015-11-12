@@ -15,14 +15,16 @@ public class Track implements Serializable {
     private long trackId;
     private long length;
     private String name;
-    private String album;
     private long genreId;
+    private Genre genre;
 
-    public Track(long length, String name, String albumName) throws AlbumNotFoundException {
+    public Track(long length, String name, Genre genre) throws AlbumNotFoundException {
         this.trackId = IdGenerator.getInstance().GetNextId();
         this.length = length;
         this.name = name;
-        this.album = albumName;
+        this.genre = genre;
+        this.genreId = genre.getGenreId();
+        genre.getTrackList().add(this.trackId);
 
         TrackStorage.getStorage().put(this.trackId, this);
     }
@@ -39,10 +41,18 @@ public class Track implements Serializable {
     public long getGenreId() {
         return genreId;
     }
-
     public void setGenreId(long genreId) {
         this.genreId = genreId;
     }
+
+    public Genre getGenre() {
+        return GenreStorage.getStorage().get(genreId);
+    }
+
+    public void setGenre(Genre genre) {
+        this.genreId = genre.getGenreId();
+    }
+
 
     @Override
     public String toString() {
@@ -50,20 +60,10 @@ public class Track implements Serializable {
                 "trackId=" + trackId +
                 ", length=" + length +
                 ", name='" + name + '\'' +
-                ", album='" + album + '\'' +
                 '}';
     }
 
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
     public long getTrackId() {
-
         return trackId;
     }
 
@@ -86,5 +86,4 @@ public class Track implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
 }

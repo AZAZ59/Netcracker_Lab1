@@ -36,11 +36,18 @@ public class Genre implements Serializable {
 
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (Long aLong : trackList) {
+            sb.append(TrackStorage.getStorage().get(aLong) + ",");
+        }
+        sb.append("}");
         return "Genre{" +
                 "genreId=" + genreId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                "}";
+                ", trackList=" + sb.toString() +
+                '}';
     }
 
     public long getGenreId() {
@@ -68,4 +75,11 @@ public class Genre implements Serializable {
         this.description = description;
     }
 
+    public ArrayList<Long> getTrackList() {
+        return trackList;
+    }
+
+    public void setTrackList(ArrayList<Long> trackList) {
+        this.trackList = trackList;
+    }
 }

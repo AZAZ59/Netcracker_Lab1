@@ -9,12 +9,14 @@ import java.io.*;
  * Created by azaz on 28/10/15.
  */
 public class FileManager implements Serializable {
-    private static FileManager ourInstance = new FileManager();
+    private static FileManager ourInstance = SingletonHelper.instance;
     private GenreStorage genreStorage;
     private TrackStorage trackStorage;
+    private IdGenerator idGenerator;
     private FileManager() {
         genreStorage = GenreStorage.getInstance();
         trackStorage = TrackStorage.getInstance();
+        idGenerator = IdGenerator.getInstance();
     }
 
     public static FileManager getInstance() {
@@ -44,9 +46,13 @@ public class FileManager implements Serializable {
         }
     }
 
+    private static class SingletonHelper {
+        private static final FileManager instance = new FileManager();
+    }
 
+/*
     protected Object readResolve() {
         return getInstance();
-    }
+    }*/
 
 }

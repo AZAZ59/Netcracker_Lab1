@@ -1,12 +1,13 @@
 package NC_Lab1.Util;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by azaz on 06/11/15.
  */
-public class IdGenerator {
-    private static IdGenerator ourInstance = new IdGenerator();
+public class IdGenerator implements Serializable {
+    private static IdGenerator ourInstance = SingletonHelper.instance;
     //private long counter=0;
     private AtomicLong counter = new AtomicLong(0);
 
@@ -20,4 +21,14 @@ public class IdGenerator {
     public long GetNextId() {
         return counter.addAndGet(1);
     }
+
+    protected Object readResolve() {
+        IdGenerator.ourInstance.counter = this.counter;
+        return ourInstance;
+    }
+
+    private static class SingletonHelper {
+        private static final IdGenerator instance = new IdGenerator();
+    }
+
 }
